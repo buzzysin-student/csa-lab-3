@@ -44,7 +44,11 @@ func mergeSort(slice []int32) {
 
 // TODO: Parallel merge sort.
 func parallelMergeSort(slice []int32) {
-	mergeSort(slice)
+	if len(slice) > 1 {
+		go parallelMergeSort(slice[:len(slice)/2])
+		parallelMergeSort(slice[len(slice)/2:])
+		defer merge(slice, len(slice)/2)
+	}
 }
 
 // main starts tracing and in parallel sorts a small slice.
@@ -69,5 +73,5 @@ func main() {
 		slice = append(slice, i)
 	}
 
-	parallelMergeSort(slice)
+	go parallelMergeSort(slice)
 }
